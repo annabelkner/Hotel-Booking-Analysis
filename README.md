@@ -42,7 +42,7 @@ Hotel cancellations severely impact revenue and operational planning. If a hotel
 | Model | Accuracy | F1-Score (Class 1) | Recall (Class 1) |
 | :--- | :---: | :---: | :---: |
 | Logistic Regression | 79% | 66% | 57% |
-| k-NN (k=3, weighted) | 85% | 80% | 80% |
+|**k-NN (k=3, weighted)**| **85%** | **80%**| **80%** |
 | SVM (poly) | 83% | 74% | 66% |
 
 
