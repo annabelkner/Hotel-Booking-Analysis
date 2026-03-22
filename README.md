@@ -15,15 +15,16 @@ Hotel cancellations severely impact revenue and operational planning. If a hotel
 
 ## Tech Stack & Methods
 * **Language:** Python
-* **Libraries:** Pandas, NumPy, Scikit-Learn, Matplotlib, Seaborn, Yellowbrick
+* **Libraries:** Pandas, NumPy, Scikit-Learn, Matplotlib, Seaborn, Yellowbrick, imblearn
 * **Dimensionality Reduction:** PCA, t-SNE, RFE 
 * **Machine Learning Algorithms:** Logistic Regression, k-Nearest Neighbors (k-NN), Support Vector Machines (SVM)
+* **Oversampling:** SMOTE algorithms
 
 ## Key EDA Insights
 * Market Segment matters: Bookings made through Online Travel Agencies (OTAs) have much higher cancellation rates compared to direct bookings.
  <img width="863" height="448" alt="image" src="https://github.com/user-attachments/assets/805a3407-9c90-4f70-ba3e-b3a15ebf9234" />
  
-* The target variable is unbalanced (there are more class 0 than class 1 observations) which may cause problems in estimating models using accuracy
+* The dataset is unbalanced (there are more class 0 than class 1 observations) which may cause problems in estimating models using accuracy
 <img width="708" height="486" alt="image" src="https://github.com/user-attachments/assets/a5daffc2-e2c3-4279-9935-70a60ddb696f" />
 
 
@@ -48,6 +49,13 @@ Hotel cancellations severely impact revenue and operational planning. If a hotel
 | Logistic Regression | 79% | 66% | 57% |
 |**k-NN (k=3, weighted)**| **85%** | **80%**| **80%** |
 | SVM (poly) | 83% | 74% | 66% |
+
+
+### Full Feature Set after SMOTE
+| Model | Accuracy | F1-Score (Class 1) | Recall (Class 1) |
+| :--- | :---: | :---: | :---: |
+|k-NN (k=9, weighted)| 82% | 78%| 84% |
+| SVM (poly) | 84% | 79% | 82% |
 
 
 **Key Takeaways:**
