@@ -25,7 +25,6 @@ Hotel cancellations severely impact revenue and operational planning. If a hotel
 <img width="863" height="448" alt="image" src="https://github.com/user-attachments/assets/d1f1ffee-e8e9-4381-930b-52e243793755" />
  
 * The dataset is unbalanced (there are more class 0 than class 1 observations) which may cause problems in estimating models using accuracy
-<img width="708" height="486" alt="image" src="https://github.com/user-attachments/assets/a5daffc2-e2c3-4279-9935-70a60ddb696f" />
 
 
 ## Modeling & Results
