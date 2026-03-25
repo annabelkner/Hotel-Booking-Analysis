@@ -23,7 +23,7 @@ Hotel cancellations severely impact revenue and operational planning. If a hotel
 
 ## Key EDA Insights
 * Market Segment matters: Bookings made through Online Travel Agencies (OTAs) have much higher cancellation rates compared to direct bookings.
-<img width="863" height="448" alt="image" src="https://github.com/user-attachments/assets/d1f1ffee-e8e9-4381-930b-52e243793755" />
+<img width="600" height="311" alt="image" src="https://github.com/user-attachments/assets/d1f1ffee-e8e9-4381-930b-52e243793755" />
  
 * Class Imbalance: The dataset is imbalanced (significantly more Class 0 than Class 1 observations). Because of this, standard Accuracy is a misleading metric. Models were evaluated primarily on F1-Score, Precision, and Recall for Class 1.
 
@@ -93,6 +93,14 @@ There is no single "best" model; the choice depends entirely on the specific fin
 
 * Why: This model prioritizes catching as many cancellations as possible. By training on SMOTE-balanced data, it achieves a Recall of 85%, ensuring the hotel identifies the vast majority of flight-risk guests so they can secure revenue via deposits.
 
-**Dimensionality Reduction Takeaway:**
+Precision_Recall Curve for SVC on RFE Selected Features dataset:
 
-While PCA failed to improve model metrics, RFECV was highly successful. It allowed the Support Vector Machine to achieve top-tier performance using fewer features, creating a lighter, faster pipeline for production.
+<img width="450" height="326" alt="precision-recall" src="https://github.com/user-attachments/assets/ef8d357d-be7f-4436-83a3-5ab1b771a05f" />
+
+ROC Curve for SVC on RFE Selected Features dataset:
+
+<img width="450" height="326" alt="image" src="https://github.com/user-attachments/assets/249ae245-1b31-4199-88fb-a90b97a20834" />
+
+The model is highly robust (ROC-AUC = 0.93). It allows the hotel to flexibly adjust its strategy based on current needs. If we want to aggressively catch 90% of all cancellations to enforce deposits, we can do so while still maintaining a 70% precision rate. If we want to safely overbook, we can catch 70% of cancellations with a 90% precision rate, minimizing the risk of walking a guest.
+
+
