@@ -3,10 +3,11 @@
 ## Project Overview
 This repository contains a machine learning project that aims to predict whether a hotel customer will cancel their reservation. By analyzing historical booking data, we build classification models that can predict cancellations based on new data.
 ## Business Problem
-Hotel cancellations severely impact revenue and operational planning. If a hotel knows in advance that a guest is highly likely to cancel, they can take proactive measures, such as:
+Hotel cancellations severely impact revenue and operational planning. If a hotel knows in advance that a guest is highly likely to cancel, they can take proactive measures. Because the cost of being wrong varies depending on the action taken, we evaluated models based on two distinct business strategies:
 
-* Optimizing Overbooking: Safely accepting more reservations than physical rooms available.
-* Targeted Communication: Sending automated reminders or requiring a deposit from high-risk guests.
+* Optimizing Overbooking: Safely accepting more reservations than physical rooms available. (Requires high Precision to avoid walking a guest if the model is wrong).
+
+* Targeted Communication: Sending automated reminders or requiring a non-refundable deposit from high-risk guests. (Requires high Recall to catch as many potential cancellations as possible).
 
 ## Dataset
 * **Source:** [Kaggle - Hotel Booking Demand](https://www.kaggle.com/datasets/jessemostipak/hotel-booking-demand)
@@ -16,7 +17,7 @@ Hotel cancellations severely impact revenue and operational planning. If a hotel
 ## Tech Stack & Methods
 * **Language:** Python
 * **Libraries:** Pandas, NumPy, Scikit-Learn, Matplotlib, Seaborn, Yellowbrick, imblearn
-* **Dimensionality Reduction:** PCA, t-SNE, RFE 
+* **Dimensionality Reduction:** PCA, t-SNE, Recursive Feature Elimination with Cross-Validation (RFECV)
 * **Machine Learning Algorithms:** Logistic Regression, k-Nearest Neighbors (k-NN), Support Vector Machines (SVM)
 * **Oversampling:** SMOTE algorithms
 
@@ -24,42 +25,74 @@ Hotel cancellations severely impact revenue and operational planning. If a hotel
 * Market Segment matters: Bookings made through Online Travel Agencies (OTAs) have much higher cancellation rates compared to direct bookings.
 <img width="863" height="448" alt="image" src="https://github.com/user-attachments/assets/d1f1ffee-e8e9-4381-930b-52e243793755" />
  
-* The dataset is unbalanced (there are more class 0 than class 1 observations) which may cause problems in estimating models using accuracy
+* Class Imbalance: The dataset is imbalanced (significantly more Class 0 than Class 1 observations). Because of this, standard Accuracy is a misleading metric. Models were evaluated primarily on F1-Score, Precision, and Recall for Class 1.
 
 
 ## Modeling & Results
 ### Full Feature Set
-| Model | Accuracy | F1-Score (Class 1) | Recall (Class 1) |
-| :--- | :---: | :---: | :---: |
-| Logistic Regression | 79% | 66% | 56% |
-| k-NN (k=3, weighted) | 83% | 78% | 79% |
-| SVM (poly) | 83% | 74% | 66% |
-
-### PCA Reduced Dataset (20 components)
-| Model | Accuracy | F1-Score (Class 1) | Recall (Class 1) |
-| :--- | :---: | :---: | :---: |
-| Logistic Regression | 77% | 63% | 53% |
-| k-NN (k=3, weighted) | 83% | 78% | 78% |
-| SVM (poly) | 82% | 71% | 61% |
-
-### RFE Selected Features
-| Model | Accuracy | F1-Score (Class 1) | Recall (Class 1) |
-| :--- | :---: | :---: | :---: |
-| Logistic Regression | 79% | 66% | 57% |
-|**k-NN (k=3, weighted)**| **85%** | **80%**| **80%** |
-| SVM (poly) | 83% | 74% | 66% |
-
+| Model | Accuracy | F1-Score (Class 1) | Precision (Class 1) | Recall (Class 1) |
+| :--- | :---: | :---: | :---: | :---: |
+| Logistic Regression | 81% | 72% | 81% | 65% |
+| k-NN | 84% | 78% | 80% | 77% |
+| SVM | 85% | 78% | 84% | 73% |
 
 ### Full Feature Set after SMOTE
-| Model | Accuracy | F1-Score (Class 1) | Recall (Class 1) |
-| :--- | :---: | :---: | :---: |
-|k-NN (k=9, weighted)| 82% | 78%| 84% |
-| SVM (poly) | 84% | 79% | 82% |
+| Model | Accuracy | F1-Score (Class 1) | Precision (Class 1) | Recall (Class 1) |
+| :--- | :---: | :---: | :---: | :---: |
+|k-NN | 82% | 78% | 73% | 83% |
+| SVM | 85% | 81% | 77% | 85% |
+
+### PCA Reduced Dataset (40 components)
+*Note: PCA generally degraded performance because it is an unsupervised technique that discarded variance vital for predicting the target variable.*
+| Model | Accuracy | F1-Score (Class 1) | Precision (Class 1) | Recall (Class 1) |
+| :--- | :---: | :---: | :---: | :---: |
+| Logistic Regression | 78% | 67% | 79% | 58% |
+| k-NN | 84% | 78% | 80% | 76% |
+| SVM | 83% | 75% | 83% | 68% |
 
 
-**Key Takeaways:**
-* The optimized k-NN model (trained on RFE selected columns) provided the best balance, successfully catching 80% of all cancellations.
+### PCA Reduced Dataset after SMOTE
+| Model | Accuracy | F1-Score (Class 1) | Precision (Class 1) | Recall (Class 1) |
+| :--- | :---: | :---: | :---: | :---: |
+| k-NN | 82% | 78% | % | 82% |
+| SVM | 83% | 78% | % | 82% |
 
-* ROC-AUC: The k-NN model (trained on RFE selected columns) achieved an AUC of 0.90, proving it is highly capable of separating the two classes.
+### RFE Selected Features
+*Note: RFECV successfully maintained the predictive power of the full dataset while dropping uninformative features, resulting in a more efficient, lighter model.*
+| Model | Accuracy | F1-Score (Class 1) | Precision (Class 1) | Recall (Class 1) |
+| :--- | :---: | :---: | :---: | :---: |
+| Logistic Regression | 81% | 71% | 81% | 63% |
+| k-NN | 85% | 80% | 81% | 79% |
+| SVM (poly) | 85% | 78% | 84% | 72% |
 
-* Precision-Recall Trade-off: The PR curve (Average Precision = 0.84) shows that if the hotel wants to aggressively catch 85% of cancellations, they must accept a drop in precision to around 70%.
+### RFE Selected Features after SMOTE
+| Model | Accuracy | F1-Score (Class 1) | Precision (Class 1) | Recall (Class 1) |
+| :--- | :---: | :---: | :---: | :---: |
+| k-NN | 83% | 79% | 74% | 84% |
+| SVM | 85% | 80% | 77% | 85% |
+
+
+
+## Business Solutions & Model Selection
+
+There is no single "best" model; the choice depends entirely on the specific financial risk the hotel is trying to mitigate.
+
+**Strategy 1: Optimizing Overbooking**
+
+* The Risk: A False Positive (predicting a cancellation, giving the room away, and the original guest shows up).
+
+* The Best Model: RFECV + SVM (Without SMOTE)
+
+* Why: This model prioritizes playing it safe. It achieves a high Precision of 84%, meaning that when it flags a guest as a cancellation, it is highly likely to be correct, making overbooking much safer.
+
+**Strategy 2: Implementing Deposits & Reminders**
+
+* The Risk: A False Negative (missing a cancellation). This results in an empty room and lost revenue. A False Positive here is low-risk, as asking a guest who intends to stay for a deposit causes minimal friction.
+
+* The Best Model: RFECV + SVM (With SMOTE)
+
+* Why: This model prioritizes catching as many cancellations as possible. By training on SMOTE-balanced data, it achieves a Recall of 85%, ensuring the hotel identifies the vast majority of flight-risk guests so they can secure revenue via deposits.
+
+**Dimensionality Reduction Takeaway:**
+
+While PCA failed to improve model metrics, RFECV was highly successful. It allowed the Support Vector Machine to achieve top-tier performance using fewer features, creating a lighter, faster pipeline for production.
