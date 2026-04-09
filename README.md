@@ -65,6 +65,7 @@ Hotel cancellations severely impact revenue and operational planning. If a hotel
 | Logistic Regression | 81% | 72% | 81% | 65% |
 | k-NN | 86% | 81% | 82% | 80% |
 | SVM (poly) | 86% | 80% | 84% | 76% |
+| Decision Tree | 85% | 81% | 77% | 84% |
 
 ### RFE Selected Features after SMOTE
 | Model | Accuracy | F1-Score (Class 1) | Precision (Class 1) | Recall (Class 1) |
