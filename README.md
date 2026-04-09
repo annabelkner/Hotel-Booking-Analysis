@@ -16,16 +16,19 @@ Hotel cancellations severely impact revenue and operational planning. If a hotel
 
 ## Tech Stack & Methods
 * **Language:** Python
-* **Libraries:** Pandas, NumPy, Scikit-Learn, Matplotlib, Seaborn, Yellowbrick, imblearn
+* **Libraries:** Pandas, NumPy, Scikit-Learn, Matplotlib, Seaborn, imblearn
+* **Preprocessing:** MinMaxScaler, One-Hot Encoding
 * **Dimensionality Reduction:** PCA, t-SNE, Recursive Feature Elimination with Cross-Validation (RFECV)
 * **Machine Learning Algorithms:** Logistic Regression, k-Nearest Neighbors (k-NN), Support Vector Machines (SVM), Decision Tree
-* **Oversampling:** SMOTE algorithms
+* **Oversampling:** SMOTE
 
 ## Key EDA Insights
 * Market Segment matters: Bookings made through Online Travel Agencies (OTAs) have much higher cancellation rates compared to direct bookings.
 <img width="600" height="311" alt="image" src="https://github.com/user-attachments/assets/d1f1ffee-e8e9-4381-930b-52e243793755" />
  
 * Class Imbalance: The dataset is imbalanced (significantly more Class 0 than Class 1 observations). Because of this, standard Accuracy is a misleading metric. Models were evaluated primarily on F1-Score, Precision, and Recall for Class 1.
+
+* Scaling & PCA: PCA struggled to compress the dataset efficiently. Because the data contains over 50 binary features (from one-hot encoding), standardizing the variance artificially inflated the importance of rare categorical variables. RFECV proved to be a much more effective dimensionality reduction technique for this specific feature space.****
 
 
 ## Modeling & Results
@@ -77,30 +80,26 @@ Hotel cancellations severely impact revenue and operational planning. If a hotel
 
 There is no single "best" model; the choice depends entirely on the specific financial risk the hotel is trying to mitigate.
 
-**Strategy 1: Optimizing Overbooking**
+### Strategy 1: Optimizing Overbooking
+* **The Risk:** A False Positive (predicting a cancellation, giving the room away, and the original guest shows up).
+* **The Champion Model:** **RFECV + SVM (Without SMOTE)**
+* **Why:** This model prioritizes playing it safe. It achieves a high Precision of **84%**, meaning that when it flags a guest as a cancellation, it is highly likely to be correct, making overbooking much safer.
 
-* The Risk: A False Positive (predicting a cancellation, giving the room away, and the original guest shows up).
+### Strategy 2: Implementing Deposits & Reminders
+* **The Risk:** A False Negative (missing a cancellation). This results in an empty room and lost revenue. A False Positive here is low-risk, as asking a guest who intends to stay for a deposit causes minimal friction.
+* **The Champion Model:** **RFECV + SVM (With SMOTE)**
+* **Why:** This model prioritizes catching as many cancellations as possible. By training on SMOTE-balanced data, it achieves a Recall of **85%**, ensuring the hotel identifies the vast majority of flight-risk guests so they can secure revenue via deposits.
 
-* The Best Model: RFECV + SVM (Without SMOTE)
+### Flexibility & Robustness (ROC/AUC)
+The Precision-Recall and ROC curves for the SVC model on RFE Selected Features demonstrate its high robustness (**ROC-AUC = 0.93**).
 
-* Why: This model prioritizes playing it safe. It achieves a high Precision of 84%, meaning that when it flags a guest as a cancellation, it is highly likely to be correct, making overbooking much safer.
+<p align="center">
+  <img width="45%" alt="Precision-Recall Curve" src="https://github.com/user-attachments/assets/ef8d357d-be7f-4436-83a3-5ab1b771a05f" />
+  <img width="45%" alt="ROC Curve" src="https://github.com/user-attachments/assets/249ae245-1b31-4199-88fb-a90b97a20834" />
+</p>
 
-**Strategy 2: Implementing Deposits & Reminders**
+This allows the hotel to flexibly adjust its decision threshold based on current needs:
+* **Aggressive approach:** Catch **90%** of all cancellations to enforce deposits (while maintaining a ~70% precision rate).
+* **Conservative approach:** Safely overbook by catching **70%** of cancellations with a **90%** precision rate, minimizing the risk of walking a guest.
 
-* The Risk: A False Negative (missing a cancellation). This results in an empty room and lost revenue. A False Positive here is low-risk, as asking a guest who intends to stay for a deposit causes minimal friction.
-
-* The Best Model: RFECV + SVM (With SMOTE)
-
-* Why: This model prioritizes catching as many cancellations as possible. By training on SMOTE-balanced data, it achieves a Recall of 85%, ensuring the hotel identifies the vast majority of flight-risk guests so they can secure revenue via deposits.
-
-Precision_Recall Curve for SVC on RFE Selected Features dataset:
-
-<img width="450" height="326" alt="precision-recall" src="https://github.com/user-attachments/assets/ef8d357d-be7f-4436-83a3-5ab1b771a05f" />
-
-ROC Curve for SVC on RFE Selected Features dataset:
-
-<img width="450" height="326" alt="image" src="https://github.com/user-attachments/assets/249ae245-1b31-4199-88fb-a90b97a20834" />
-
-The model is highly robust (ROC-AUC = 0.93). It allows the hotel to flexibly adjust its strategy based on current needs. If we want to aggressively catch 90% of all cancellations to enforce deposits, we can do so while still maintaining a 70% precision rate. If we want to safely overbook, we can catch 70% of cancellations with a 90% precision rate, minimizing the risk of walking a guest.
-
-
+---
