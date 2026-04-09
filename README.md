@@ -18,7 +18,7 @@ Hotel cancellations severely impact revenue and operational planning. If a hotel
 * **Language:** Python
 * **Libraries:** Pandas, NumPy, Scikit-Learn, Matplotlib, Seaborn, Yellowbrick, imblearn
 * **Dimensionality Reduction:** PCA, t-SNE, Recursive Feature Elimination with Cross-Validation (RFECV)
-* **Machine Learning Algorithms:** Logistic Regression, k-Nearest Neighbors (k-NN), Support Vector Machines (SVM)
+* **Machine Learning Algorithms:** Logistic Regression, k-Nearest Neighbors (k-NN), Support Vector Machines (SVM), Decision Tree
 * **Oversampling:** SMOTE algorithms
 
 ## Key EDA Insights
@@ -32,14 +32,15 @@ Hotel cancellations severely impact revenue and operational planning. If a hotel
 ### Full Feature Set
 | Model | Accuracy | F1-Score (Class 1) | Precision (Class 1) | Recall (Class 1) |
 | :--- | :---: | :---: | :---: | :---: |
-| Logistic Regression | 81% | 72% | 81% | 65% |
-| k-NN | 84% | 78% | 80% | 77% |
-| SVM | 85% | 78% | 84% | 73% |
+| Logistic Regression | 81% | 72% | 80% | 65% |
+| k-NN | 85% | 79% | 81% | 77% |
+| SVM | 86% | 80% | 84% | 76% |
+| Decision Tree | 85% | 80% | 77% | 84% |
 
 ### Full Feature Set after SMOTE
 | Model | Accuracy | F1-Score (Class 1) | Precision (Class 1) | Recall (Class 1) |
 | :--- | :---: | :---: | :---: | :---: |
-|k-NN | 82% | 78% | 73% | 83% |
+|k-NN | 83% | 78% | 73% | 84% |
 | SVM | 85% | 81% | 77% | 85% |
 
 ### PCA Reduced Dataset (40 components)
@@ -47,31 +48,29 @@ Hotel cancellations severely impact revenue and operational planning. If a hotel
 | Model | Accuracy | F1-Score (Class 1) | Precision (Class 1) | Recall (Class 1) |
 | :--- | :---: | :---: | :---: | :---: |
 | Logistic Regression | 78% | 67% | 79% | 58% |
-| k-NN | 84% | 78% | 80% | 76% |
-| SVM | 83% | 75% | 83% | 68% |
+| k-NN | 85% | 79% | 81% | 77% |
+| SVM | 83% | 77% | 83% | 73% |
 
 
 ### PCA Reduced Dataset after SMOTE
 | Model | Accuracy | F1-Score (Class 1) | Precision (Class 1) | Recall (Class 1) |
 | :--- | :---: | :---: | :---: | :---: |
-| k-NN | 82% | 78% | % | 82% |
-| SVM | 83% | 78% | % | 82% |
+| k-NN | 82% | 78% | 74% | 82% |
+| SVM | 83% | 78% | 74% | 82% |
 
 ### RFE Selected Features
 *Note: RFECV successfully maintained the predictive power of the full dataset while dropping uninformative features, resulting in a more efficient, lighter model.*
 | Model | Accuracy | F1-Score (Class 1) | Precision (Class 1) | Recall (Class 1) |
 | :--- | :---: | :---: | :---: | :---: |
-| Logistic Regression | 81% | 71% | 81% | 63% |
-| k-NN | 85% | 80% | 81% | 79% |
-| SVM (poly) | 85% | 78% | 84% | 72% |
+| Logistic Regression | 81% | 72% | 81% | 65% |
+| k-NN | 86% | 81% | 82% | 80% |
+| SVM (poly) | 86% | 80% | 84% | 76% |
 
 ### RFE Selected Features after SMOTE
 | Model | Accuracy | F1-Score (Class 1) | Precision (Class 1) | Recall (Class 1) |
 | :--- | :---: | :---: | :---: | :---: |
-| k-NN | 83% | 79% | 74% | 84% |
+| k-NN | 84% | 80% | 75% | 85% |
 | SVM | 85% | 80% | 77% | 85% |
-
-
 
 ## Business Solutions & Model Selection
 
