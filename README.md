@@ -19,7 +19,7 @@ Hotel cancellations severely impact revenue and operational planning. If a hotel
 * **Libraries:** Pandas, NumPy, Scikit-Learn, Matplotlib, Seaborn, imblearn
 * **Preprocessing:** MinMaxScaler, One-Hot Encoding
 * **Dimensionality Reduction:** PCA, t-SNE, Recursive Feature Elimination with Cross-Validation (RFECV)
-* **Machine Learning Algorithms:** Logistic Regression, k-Nearest Neighbors (k-NN), Support Vector Machines (SVM), Decision Tree
+* **Machine Learning Algorithms:** Logistic Regression, k-Nearest Neighbors (k-NN), Support Vector Machines (SVM), Decision Tree, Artificial Neural Networks (Perceptron, Multi-Layer Perceptron)
 * **Oversampling:** SMOTE
 
 ## Key EDA Insights
@@ -76,14 +76,25 @@ Hotel cancellations severely impact revenue and operational planning. If a hotel
 | k-NN | 84% | 80% | 75% | 85% |
 | SVM | 85% | 80% | 77% | 85% |
 
+### Artificial Neural Networks Experiments
+To explore complex, non-linear relationships in the data, we designed an experimental progression of neural network architectures, starting from a single neuron to Deep Learning models.  
+
+| Model Architecture | Accuracy | F1-Score (Class 1) | Precision (Class 1) | Recall (Class 1) |
+| :--- | :---: | :---: | :---: | :---: |
+| Single Perceptron (Linear) | 77% | 55% | 94% | 39% |
+| Single Neuron (Sigmoid / Logistic Reg.) | 81% | 71% | 80% | 64% |
+| MLP - 1 Hidden Layer (10) | 85% | 79% | 82% | 77% |
+| MLP - 2 Hidden Layers (32, 16) | 87% | 81% | 85% | 78% |
+| Deep MLP - 3 Hidden Layers (64, 32, 16) | 86% | 81% | 81% | 80% |
+
 ## Business Solutions & Model Selection
 
 There is no single "best" model; the choice depends entirely on the specific financial risk the hotel is trying to mitigate.
 
 ### Strategy 1: Optimizing Overbooking
 * **The Risk:** A False Positive (predicting a cancellation, giving the room away, and the original guest shows up).
-* **The Champion Model:** **RFECV + SVM (Without SMOTE)**
-* **Why:** This model prioritizes playing it safe. It achieves a high Precision of **84%**, meaning that when it flags a guest as a cancellation, it is highly likely to be correct, making overbooking much safer.
+* **The Champion Models:** **MLP (32, 16) Architecture** OR **RFECV + SVM (Without SMOTE)**
+* **Why:** Both models prioritize playing it safe. The Multi-Layer Perceptron (32, 16) achieved the highest overall Precision of **85%**, while the SVM achieved **84%**. This means that when they flag a guest as a cancellation, they are highly likely to be correct, making overbooking much safer. While the SVM is highly robust and interpretable, the MLP provides a slight edge in raw predictive power.
 
 ### Strategy 2: Implementing Deposits & Reminders
 * **The Risk:** A False Negative (missing a cancellation). This results in an empty room and lost revenue. A False Positive here is low-risk, as asking a guest who intends to stay for a deposit causes minimal friction.
